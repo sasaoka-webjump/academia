@@ -7,7 +7,6 @@ use Pecee\SimpleRouter\SimpleRouter;
 class Router extends SimpleRouter
 {
 
-
     /**
      * Setup the router configurations
      *
