@@ -22,6 +22,7 @@ class ApiVerification implements IMiddleware
             header('Access-Control-Allow-Methods: GET, POST');
             header("Access-Control-Allow-Headers: X-Requested-With");
             $request->authenticated = true;
+            $request->authCustomer = $customer;
         } else {
             header('HTTP/1.1 401 Authorization Required');
             header('WWW-Authenticate: Basic realm="Access denied"');

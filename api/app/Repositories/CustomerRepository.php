@@ -25,7 +25,7 @@ class CustomerRepository
      * 
      * @param integer $id
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * @return App\Models\Customers\Customer
+     * @return \App\Models\Customers\Customer
      */
     public function findOrFail($id)
     {
@@ -37,7 +37,8 @@ class CustomerRepository
     /**
      * Creates a new Customer
      * 
-     * @return App\Models\CustomerCompany|App\Models\CustomerPerson;
+     * @param Array $inputData
+     * @return \App\Models\CustomerCompany|\App\Models\CustomerPerson;
      */
     public function create($inputData)
     {

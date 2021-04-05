@@ -24,5 +24,5 @@ class Transaction extends Model
      *
      * @var string
      */
-    protected $table = 'customers';
+    protected $table = 'transactions';
 }

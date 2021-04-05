@@ -125,6 +125,20 @@ try {
         'adress_complement' => 'complement',
         'is_company' => false
     ]);
+
+    $customer = CustomerPerson::create([
+        'accountNumber' => 'another test',
+        'password' => md5('teste'),
+        'phone_number' => '(31)3333-3333',
+        'zip_code' => '35355355',
+        'adress_state' => 'MG',
+        'adress_city' => 'JF',
+        'adress_district' => 'District',
+        'adress_street' => 'street',
+        'adress_number' => 'number',
+        'adress_complement' => 'complement',
+        'is_company' => false
+    ]);
 } catch (Exception $error) {
     echo 'Failed migrating the database!' . PHP_EOL;
 

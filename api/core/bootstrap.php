@@ -5,8 +5,11 @@ use App\Router;
 use App\EnvironmentVariablesLoader;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-// Requires the autoloaded classes
+// Require the autoloaded classes
 require_once(__DIR__ . '/../vendor/autoload.php');
+
+// Require the global error handler
+require_once(__DIR__ . '/handler.php');
 
 // Loads the environment variables from .env 
 EnvironmentVariablesLoader::start();

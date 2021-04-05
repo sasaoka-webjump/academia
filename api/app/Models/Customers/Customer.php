@@ -3,6 +3,7 @@
 namespace App\Models\Customers;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Transactions\Transaction;
 
 class Customer extends Model
 {
@@ -32,4 +33,20 @@ class Customer extends Model
      * @var string
      */
     protected $table = 'customers';
+
+    /**
+     * Get the transactions this customer made
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'origin_customer_id');
+    }
+
+    /**
+     * Get the transactions this customer received
+     */
+    public function received()
+    {
+        return $this->hasMany(Transaction::class, 'destination_customer_id');
+    }
 }
