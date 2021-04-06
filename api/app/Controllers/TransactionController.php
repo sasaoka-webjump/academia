@@ -2,9 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Repositories\TransactionRepository;
-use App\Repositories\CustomerRepository;
-
 class TransactionController
 {
     /**
@@ -18,18 +15,27 @@ class TransactionController
     protected $customerRepository;
 
     /**
+     * @var \App\Logger
+     */
+    protected $logger;
+
+    /**
      * @param \App\Repositories\CustomerRepository $customerRepository
      * @param \App\Repositories\TransactionRepository $transactionRepository
      * @return void
      */
-    public function __construct(CustomerRepository $customerRepository, TransactionRepository $transactionRepository)
-    {
+    public function __construct(
+        \App\Repositories\CustomerRepository $customerRepository,
+        \App\Repositories\TransactionRepository $transactionRepository,
+        \App\Logger $logger
+    ) {
         $this->transactionRepository = $transactionRepository;
         $this->customerRepository = $customerRepository;
+        $this->logger = $logger;
     }
 
     /**
-     * Withdraw an amount from the authenticated user
+     * Withdraw an amount from the authenticated customer
      */
     public function withdraw()
     {
@@ -39,6 +45,8 @@ class TransactionController
         $this->transactionRepository->withdraw($customer, $value);
         $balance = $this->transactionRepository->getBalance($customer);
 
+        $this->logger->warn('Withdraw', [$customer, $value]);
+
         return response()->httpCode(200)->json([
             'message' => 'Withdraw completed with success',
             'newBalance' => $balance
@@ -46,12 +54,14 @@ class TransactionController
     }
 
     /**
-     * Return the authenticated user's balance
+     * Return the authenticated customer's balance
      */
     public function balance()
     {
         $customer = request()->authCustomer;
         $balance = $this->transactionRepository->getBalance($customer);
+
+        $this->logger->warn('Balance check', [$customer]);
 
         return response()->httpCode(200)->json([
             'balance' => $balance
@@ -59,7 +69,7 @@ class TransactionController
     }
 
     /**
-     * Deposit an amount to the authenticated user's founds
+     * Deposit an amount to the authenticated customer's founds
      */
     public function deposit()
     {
@@ -69,13 +79,15 @@ class TransactionController
         $this->transactionRepository->deposit($customer, $value);
         $balance = $this->transactionRepository->getBalance($customer);
 
+        $this->logger->warn('Deposit', [$customer, $value]);
+
         return response()->httpCode(200)->json([
             'newBalance' => $balance
         ]);
     }
 
     /**
-     * transfer an amount from the authenticated user's founds to another customer
+     * transfer an amount from the authenticated customer's founds to another customer
      * 
      * @param int $destinationCustomerId
      */
@@ -86,6 +98,9 @@ class TransactionController
 
         $this->transactionRepository->transfer($customer, $destinationCustomerId, $value);
         $balance = $this->transactionRepository->getBalance($customer);
+
+        $this->logger->warn('Transfer [$customer, $destinationCustomerId, $value]', [$customer, $destinationCustomerId, $value]);
+
 
         return response()->httpCode(200)->json([
             'newBalance' => $balance

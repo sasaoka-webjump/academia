@@ -7,6 +7,7 @@ use App\Models\Customers\CustomerCompany;
 use App\Models\Customers\CustomerPerson;
 use App\Models\Customers\RegistrationData\CompanyRegistrationData;
 use App\Models\Customers\RegistrationData\PersonRegistrationData;
+use App\Exceptions\CustomerNotFoundException;
 
 class CustomerRepository
 {
@@ -20,7 +21,7 @@ class CustomerRepository
     }
 
     /**
-     * Try to find a specific customer.
+     * Try to find a specific customer by id.
      * Throws an error if not able to find it.
      * 
      * @param integer $id
@@ -32,6 +33,23 @@ class CustomerRepository
         $customer = Customer::findOrFail($id);
 
         return $customer;
+    }
+
+    /**
+     * Try to find a specific customer by account number.
+     * Throws an error if not able to find it.
+     * 
+     * @param string $accountNumber
+     * @throws \App\Exceptions\CustomerNotFoundException
+     * @return \App\Models\Customers\Customer
+     */
+    public function findByAccountNumberOrFail($accountNumber)
+    {
+        $customer = Customer::where('accountNumber', $accountNumber)->first();
+
+        if($customer) return $customer;
+
+        throw new CustomerNotFoundException();
     }
 
     /**

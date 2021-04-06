@@ -6,15 +6,18 @@ use DI\ContainerBuilder;
 
 class App
 {
+    /**
+     * @var \DI\Container $container
+     */
     private static $container;
 
     /**
      * Returns the container instance. If it doesn't exists
      * yet, create it before returning it.
      *
-     * @return \DI\Container
+     * @return \DI\Container;
      */
-    public static function getContainer()
+    public static function getContainer():\DI\Container
     {
         if (!isset(self::$container)) {
             self::createContainer();

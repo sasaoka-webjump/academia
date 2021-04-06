@@ -32,6 +32,8 @@ $capsule->bootEloquent();
 
 // Inicializes and get the application container
 $container = App::getContainer();
+$container->set('log', 'bar');
+
 
 // Setup the Router, require the routes and then starts the router
 Router::setup($container);
