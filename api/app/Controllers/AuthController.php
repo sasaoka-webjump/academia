@@ -35,8 +35,12 @@ class AuthController
      */
     public function login()
     {
-        $accountNumber = input()->post('accountNumber')->getValue();
-        $password = input()->post('password')->getValue();
+        $requestData = input()->all([
+            'accountNumber',
+            'password'
+        ]);
+        $accountNumber = $requestData['accountNumber'];
+        $password = $requestData['password'];
 
         $customer = $this->customerRepository->findByAccountNumberOrFail($accountNumber);
 
@@ -45,7 +49,10 @@ class AuthController
         if ($passwordMatched) {
             $this->logger->warn('Successfully logged in', [$customer]);
 
-            response()->json(['token' => base64_encode($accountNumber . ':' . $password)]);
+            response()->httpCode(200)->json([
+                'token' => base64_encode($accountNumber . ':' . $password),
+                'customerId' => $customer->id
+                ]);
         } else {
             $this->logger->warn('Login failed: password did not match', [$customer]);
 

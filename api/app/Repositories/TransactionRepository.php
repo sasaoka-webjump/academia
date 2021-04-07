@@ -12,6 +12,17 @@ class TransactionRepository
     const WITHDRAW = "withdraw";
     const TRANSFER = "transfer";
     const DEPOSIT = "deposit";
+
+    /**
+     * @var \App\Repositories\CustomerRepository $customerRepository
+     */
+    protected $customerRepository;
+
+    public function __construct(\App\Repositories\CustomerRepository $customerRepository)
+    {
+        $this->customerRepository = $customerRepository;
+    }
+
     /**
      * Get the sum of all given transactions
      * @param \Illuminate\Database\Eloquent\Collection $transaction
@@ -136,15 +147,17 @@ class TransactionRepository
     /**
      * Create a new transfer transaction
      * @param \App\Models\Customers\Customer $customer
-     * @param int $destinationCustomerId
+     * @param string $destinationAccountNumber
      * @param float $value
      * @return void
      */
-    public function transfer(Customer $customer, int $destinationCustomerId, float $value)
+    public function transfer(Customer $customer, string $destinationAccountNumber, float $value)
     {
         $this->checkBalanceBeforeTransfer($customer, $value);
 
-        $this->create($customer->id, $destinationCustomerId, $value, self::TRANSFER);
+        $destination = $this->customerRepository->findByAccountNumberOrFail($destinationAccountNumber);
+
+        $this->create($customer->id, $destination->id, $value, self::TRANSFER);
     }
 
     /**

@@ -127,7 +127,7 @@ try {
     ]);
 
     $customer = CustomerPerson::create([
-        'accountNumber' => 'another test',
+        'accountNumber' => 'another',
         'password' => md5('teste'),
         'phone_number' => '(31)3333-3333',
         'zip_code' => '35355355',

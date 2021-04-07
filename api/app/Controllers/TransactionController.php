@@ -39,7 +39,11 @@ class TransactionController
      */
     public function withdraw()
     {
-        $value = input()->post('value')->getValue();
+        $requestData = input()->all([
+            'value'
+        ]);
+        $value = $requestData['value'];
+
         $customer = request()->authCustomer;
 
         $this->transactionRepository->withdraw($customer, $value);
@@ -47,7 +51,7 @@ class TransactionController
 
         $this->logger->warn('Withdraw', [$customer, $value]);
 
-        return response()->httpCode(200)->json([
+        return response()->json([
             'message' => 'Withdraw completed with success',
             'newBalance' => $balance
         ]);
@@ -63,7 +67,7 @@ class TransactionController
 
         $this->logger->warn('Balance check', [$customer]);
 
-        return response()->httpCode(200)->json([
+        return response()->json([
             'balance' => $balance
         ]);
     }
@@ -73,15 +77,19 @@ class TransactionController
      */
     public function deposit()
     {
+        $requestData = input()->all([
+            'value'
+        ]);
+        $value = $requestData['value'];
+
         $customer = request()->authCustomer;
-        $value = input()->post('value')->getValue();
 
         $this->transactionRepository->deposit($customer, $value);
         $balance = $this->transactionRepository->getBalance($customer);
 
         $this->logger->warn('Deposit', [$customer, $value]);
 
-        return response()->httpCode(200)->json([
+        return response()->json([
             'newBalance' => $balance
         ]);
     }
@@ -89,20 +97,24 @@ class TransactionController
     /**
      * transfer an amount from the authenticated customer's founds to another customer
      * 
-     * @param int $destinationCustomerId
+     * @param string $destinationAccountNumber
      */
-    public function transfer(int $destinationCustomerId)
+    public function transfer(string $destinationAccountNumber)
     {
+        $requestData = input()->all([
+            'value'
+        ]);
+        $value = $requestData['value'];
+        
         $customer = request()->authCustomer;
-        $value = input()->post('value')->getValue();
 
-        $this->transactionRepository->transfer($customer, $destinationCustomerId, $value);
+        $this->transactionRepository->transfer($customer, $destinationAccountNumber, $value);
         $balance = $this->transactionRepository->getBalance($customer);
 
-        $this->logger->warn('Transfer [$customer, $destinationCustomerId, $value]', [$customer, $destinationCustomerId, $value]);
+        $this->logger->warn('Transfer [$customer, $destinationAccountNumber, $value]', [$customer, $destinationAccountNumber, $value]);
 
 
-        return response()->httpCode(200)->json([
+        return response()->json([
             'newBalance' => $balance
         ]);
     }

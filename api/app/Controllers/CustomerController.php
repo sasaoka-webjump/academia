@@ -44,11 +44,12 @@ class CustomerController
     public function show($id)
     {
         $customer = $this->customerRepository->findOrFail($id);
-
+        $registrationData =$this->customerRepository->getRegistrationData($customer);
         $this->logger->warn('Showed a customer', [$customer]);
 
         return response()->json([
-            'customer' => $customer
+            'customer' => $customer,
+            'registrationData' => $registrationData
         ]);
     }
 

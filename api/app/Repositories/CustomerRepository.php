@@ -36,6 +36,22 @@ class CustomerRepository
     }
 
     /**
+     * Get the customer registration data 
+     * @param \App\Models\Customers\Customer $customer
+     * @return \App\Models\Customers\RegistrationData\CompanyRegistrationData|\App\Models\Customers\RegistrationData\PersonRegistrationData
+     */
+    public function getRegistrationData(Customer $customer)
+    {
+        if($customer->is_company){
+            $registrationData = CompanyRegistrationData::where('customer_id', $customer->id)->first();
+        } else {
+            $registrationData = PersonRegistrationData::where('customer_id', $customer->id)->first();
+        }
+
+        return $registrationData;
+    }
+
+    /**
      * Try to find a specific customer by account number.
      * Throws an error if not able to find it.
      * 

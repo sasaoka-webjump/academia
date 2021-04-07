@@ -1,4 +1,4 @@
-FROM php:7.3-cli
+FROM php:7.4-apache
 
 # Dependencies
  RUN apt-get update && apt-get install -y \
@@ -20,6 +20,10 @@ FROM php:7.3-cli
 RUN docker-php-ext-install \
     pdo_mysql
 
+RUN a2enmod headers \
+    && sed -ri -e 's/^([ \t]*)(<\/VirtualHost>)/\1\tHeader set Access-Control-Allow-Origin "*"\n\1\2/g' /etc/apache2/sites-available/*.conf
+
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -31,6 +35,6 @@ VOLUME /var/www/html
 
 COPY . .
 
-EXPOSE 8000
-
 CMD php -S 0.0.0.0:8000 -t /var/www/html/public
+
+EXPOSE 8000
