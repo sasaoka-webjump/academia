@@ -29,7 +29,7 @@ const Home = (props) => {
       .then((response) => {
         console.log(response.data);
         setCustomer(response.data.customer);
-        setRegistrationData(response.data.regisdtrationData);
+        setRegistrationData(response.data.registrationData);
       });
   }, []);
 
