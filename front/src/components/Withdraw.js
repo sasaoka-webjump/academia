@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./Layout";
-import { Form, Input, Button, InputNumber } from "antd";
+import { Form, Alert, Button, InputNumber } from "antd";
 
 import { useHistory } from "react-router-dom";
 
@@ -33,6 +33,13 @@ const Withdraw = () => {
     }
   }, []);
 
+  const [visible, setVisible] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
+  const handleClose = () => {
+    setVisible(false);
+    setErrorVisible(false);
+  };
+
   const onFinish = async (values) => {
     try {
       const response = await api.post(
@@ -47,8 +54,10 @@ const Withdraw = () => {
         }
       );
 
+      setVisible(true);
       console.log(response.data);
     } catch (error) {
+      setErrorVisible(true);
       console.log("Failed:", error);
     }
   };
@@ -88,6 +97,26 @@ const Withdraw = () => {
             </Button>
           </Form.Item>
         </Form>
+      </div>
+      <div>
+        {visible ? (
+          <Alert
+            message="Depósito realizado com sucesso"
+            type="success"
+            closable
+            afterClose={handleClose}
+          />
+        ) : null}
+      </div>
+      <div>
+        {errorVisible  ? (
+          <Alert
+            message="Saldo insuficiente"
+            type="error"
+            closable
+            afterClose={handleClose}
+          />
+        ) : null}
       </div>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./Layout";
 import { Form, Input, Button, InputNumber } from "antd";
 
@@ -32,6 +32,11 @@ const Transfer = () => {
       return <div />;
     }
   }, []);
+
+  const [visible, setVisible] = useState(false);
+  const handleClose = () => {
+    setVisible(false);
+  };
 
   const onFinish = async (values) => {
     try {
@@ -97,7 +102,7 @@ const Transfer = () => {
 
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
-              Depositar
+              Efetuar Transação
             </Button>
           </Form.Item>
         </Form>

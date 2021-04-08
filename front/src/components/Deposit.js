@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./Layout";
-import { Form, Input, Button, InputNumber } from "antd";
+import { Form, Alert, Button, InputNumber } from "antd";
 
 import { useHistory } from "react-router-dom";
 
@@ -26,12 +26,16 @@ const Deposit = () => {
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-
     if (!token) {
       history.push("/login");
       return <div />;
     }
   }, []);
+
+  const [visible, setVisible] = useState(false);
+  const handleClose = () => {
+    setVisible(false);
+  };
 
   const onFinish = async (values) => {
     try {
@@ -46,7 +50,7 @@ const Deposit = () => {
           },
         }
       );
-
+      setVisible(true);
       console.log(response.data);
     } catch (error) {
       console.log("Failed:", error);
@@ -88,6 +92,17 @@ const Deposit = () => {
             </Button>
           </Form.Item>
         </Form>
+      </div>
+
+      <div>
+        {visible ? (
+          <Alert
+            message="Depósito realizado com sucesso"
+            type="success"
+            closable
+            afterClose={handleClose}
+          />
+        ) : null}
       </div>
     </Layout>
   );
