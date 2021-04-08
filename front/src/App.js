@@ -1,6 +1,7 @@
 import "antd/dist/antd.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Login, Home, Deposit, Withdraw, Trasnfer} from "./pages";
+import Logout from "./components/Logout";
+import { Login, Home, Deposit, Withdraw, Trasnfer, Transactions} from "./pages";
 function App() {
   return (
     <Router>
@@ -21,6 +22,12 @@ function App() {
         </Route>
         <Route path="/transfer">
           <Trasnfer />
+        </Route>
+        <Route path="/logout">
+          <Logout />
+        </Route>
+        <Route path="/transactions">
+          <Transactions />
         </Route>
       </Switch>
     </Router>
